@@ -1,0 +1,141 @@
+
+let color, width, drawing, startX, startY, currentTouch, currentTouchEnd;
+
+function begin() {
+  canvas = document.getElementById("canvas");
+  ctx = canvas.getContext("2d");
+
+  // Creacion de los listener para interaccion con el usuario
+
+  canvas.addEventListener("mousedown", click);
+  canvas.addEventListener("mouseup", unclick);
+  canvas.addEventListener("touchstart", handleStart);
+  canvas.addEventListener("touchend", handleEnd);
+  canvas.addEventListener("touchmove", handleMove);
+  document.addEventListener("mousemove", moveMouse);
+
+  color = "#000";
+  width = 7;
+}
+
+function handleStart(evt) {
+  drawing = true;
+  currentTouch = evt.touches[evt.touches.length - 1];
+
+  startX = currentTouch.clientX;
+  startY = currentTouch.clientY;
+
+  // Empezar camino
+  ctx.beginPath();
+
+  // Averiguar coordenadas para dibujar
+  ctx.moveTo(startX, startY);
+}
+
+function handleMove(evt) {
+  if (drawing) {
+    currentTouchEnd = evt.touches[evt.touches.length - 1];
+    // Color
+    ctx.strokeStyle = color;
+
+    // Width
+    ctx.lineWidth = width;
+
+    // Se indica hasta donde se va a dibujar la linea
+    ctx.lineTo(currentTouchEnd.clientX, currentTouchEnd.clientY);
+
+    // Dibuja la linea
+    ctx.stroke();
+
+    // Send the mouse coordinates
+    sendmouse(startX, startY, currentTouchEnd.clientX, currentTouchEnd.clientY);
+    startX = currentTouchEnd.clientX;
+    startY = currentTouchEnd.clientY;
+  }
+}
+
+function handleEnd(e) {
+  // Terminar dibujo
+  ctx.closePath();
+  drawing = false;
+}
+
+function changeColor(currentColor) {
+  color = `#${currentColor}`;
+
+  // Cambio color relleno de fondo del color actual
+  document.getElementById("rellenoActual").style.background = color;
+}
+
+function changeWidth(currentWidth) {
+  width = currentWidth;
+}
+
+function click(e) {
+  drawing = true;
+  startX = e.clientX;
+  startY = e.clientY;
+  // Empezar camino
+  ctx.beginPath();
+
+  // Averiguar coordenadas para dibujar
+  ctx.moveTo(startX, startY);
+}
+
+function moveMouse(e) {
+  // Condicional si esta dibujando
+  if (drawing) {
+    // Color
+    ctx.strokeStyle = color;
+
+    // Width
+    ctx.lineWidth = width;
+
+    // Se indica hasta donde se va a dibujar la linea
+    ctx.lineTo(e.clientX, e.clientY);
+
+    // Dibuja la linea
+    ctx.stroke();
+
+    // Send the mouse coordinates
+    sendmouse(startX, startY, e.clientX, e.clientY);
+    startX = e.clientX;
+    startY = e.clientY;
+  }
+}
+
+function unclick(e) {
+  // Terminar dibujo
+  ctx.closePath();
+  drawing = false;
+}
+
+function paint(data) {
+  ctx.beginPath();
+  ctx.moveTo(data.x, data.y);
+  ctx.strokeStyle = data.color;
+  ctx.lineWidth = data.width;
+  ctx.lineTo(data.px, data.py);
+  ctx.stroke();
+  ctx.closePath();
+}
+
+// Start the socket connection
+socket = io.connect("http://localhost:3000");
+
+socket.on("mouse", (data) => {
+  paint(data);
+});
+
+// Sending data to the socket
+function sendmouse(x, y, pX, pY) {
+  const data = {
+    x: x,
+    y: y,
+    px: pX,
+    py: pY,
+    color: color,
+    width: width,
+  };
+  socket.emit("mouse", data);
+}

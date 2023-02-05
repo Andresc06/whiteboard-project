@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      type="text/javascript"
+      src="node_modules/socket.io/client-dist/socket.io.js"
+    ></script>
+    <script src="index.js"></script>
+    <link rel="stylesheet" href="/index.css" />
+    <title>Document</title>
+  </head>
+  <body onload="begin()">
+    <canvas id="canvas" class="canvas" width="1000px" height="400px"></canvas>
+    <canvas id="canvas2" class="canvas" width="1000px" height="400px"></canvas>
+    <canvas id="canvas3" class="canvas" width="1000px" height="400px"></canvas>
+    <canvas id="canvas4" class="canvas" width="1000px" height="400px"></canvas>
+    <div id="space"></div>
+
+    <div id="center">
+      <div id="tabs">
+        <button class="botonesTabs" id="but1" onclick="movecanva(0)" enabled>
+          1
+        </button>
+        <button class="botonesTabs" id="but2" onclick="movecanva(1)">2</button>
+        <button class="botonesTabs" id="but3" onclick="movecanva(2)">3</button>
+        <button class="botonesTabs" id="but4" onclick="movecanva(3)">4</button>
+      </div>
+      <div id="botonera">
+        <div>
+          <div id="rellenoActual"></div>
+        </div>
+
+        <div>
+          <p id="subtitle">Color</p>
+          <div
+            class="botones"
+            onclick="changeColor('333')"
+            style="background: #333"
+          ></div>
+          <div
+            class="botones"
+            onclick="changeColor('fff')"
+            style="background: #fff"
+          ></div>
+          <div
+            class="botones"
+            onclick="changeColor('0000fe')"
+            style="background: #0000fe"
+          ></div>
+          <div
+            class="botones"
+            onclick="changeColor('FF0000')"
+            style="background: #ff0000"
+          ></div>
+          <div
+            class="botones"
+            onclick="changeColor('9900ff')"
+            style="background: #9900ff"
+          ></div>
+          <div
+            class="botones"
+            onclick="changeColor('03bb00')"
+            style="background: #03bb00"
+          ></div>
+
+          <br />
+          <p id="subtitle">Width</p>
+
+          <button class="botones" id="wd1" onclick="changeWidth(1)">1</button>
+          <button class="botones" id="wd2" onclick="changeWidth(2)">2</button>
+          <button class="botones" id="wd3" onclick="changeWidth(3)">3</button>
+          <button class="botones" id="wd4" onclick="changeWidth(4)">4</button>
+          <button class="botones" id="wd5" onclick="changeWidth(5)">5</button>
+          <button class="botones" id="wd6" onclick="changeWidth(6)">6</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
