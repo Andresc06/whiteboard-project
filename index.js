@@ -177,7 +177,7 @@ function paint(data) {
 }
 
 // Start the socket connection
-socket = io.connect("https://whiteboard-project-andresc06.netlify.app:3000");
+socket = io.connect("/:3000");
 
 socket.on("mouse", (data) => {
   paint(data);
